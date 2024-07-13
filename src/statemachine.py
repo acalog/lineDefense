@@ -13,8 +13,8 @@ class StateMachine:
         self.current = self.states[state_name]()
         self.current.enter(enter_params)
 
-    def update(self):
-        self.current.update()
+    def update(self, dt):
+        self.current.update(dt)
 
     def render(self, screen):
         self.current.render(screen)

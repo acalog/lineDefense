@@ -10,7 +10,7 @@ class BaseState:
     def exit(self):
         pass
 
-    def update(self):
+    def update(self, dt):
         pass
 
     def render(self, screen):

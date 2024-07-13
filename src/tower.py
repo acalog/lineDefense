@@ -1,21 +1,21 @@
 import pygame
-import math
 
-from projectile import Projectile
+from src.projectile import Projectile
+from globals import G_OPTIONS
 
 
 class Tower:
-    def __init__(self, position, cell_size, range=10000, damage=30, fire_rate=5):
+    def __init__(self, position, cell_size):
         self.position = position
-        self.range = range
+        self.range = G_OPTIONS['towers']['range']
         self.cell_size = cell_size
-        self.cell_color = (51, 255, 153)
-        self.damage = damage
-        self.fire_rate = fire_rate
+        self.cell_color = G_OPTIONS['colors']['tower']
+        self.damage = G_OPTIONS['towers']['damage']
+        self.fire_rate = G_OPTIONS.get('towers').get('fire_rate')
         self.cooldown = 0
         self.projectiles = []
 
-    def update(self, enemies):
+    def update(self, enemies, dt):
         if self.cooldown > 0:
             self.cooldown -= 1
 
@@ -26,7 +26,7 @@ class Tower:
                 self.cooldown = self.fire_rate
 
         for projectile in self.projectiles:
-            projectile.update()
+            projectile.update(dt)
 
         # Remove projectiles that are no longer alive
         self.projectiles = [p for p in self.projectiles if p.alive]
@@ -40,7 +40,7 @@ class Tower:
             tower_position = pygame.Vector2(self.position) * self.cell_size
             distance = tower_position.distance_to(enemy_position)
 
-            if distance <= self.range and distance < closest_distance:
+            if distance <= self.range * self.cell_size and distance < closest_distance:
                 closest_distance = distance
                 closest_enemy = enemy
 

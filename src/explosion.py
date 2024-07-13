@@ -1,9 +1,10 @@
 import random
+
 import pygame
 
 
 class Explosion:
-    def __init__(self, position, cell_size, duration=30):
+    def __init__(self, position, cell_size, duration=16):
         self.position = pygame.Vector2(position)
         self.cell_size = cell_size
         self.duration = duration
@@ -12,7 +13,7 @@ class Explosion:
 
     def create_particles(self):
         particles = []
-        for _ in range(40):
+        for _ in range(32):
             particle_position = self.position + pygame.Vector2(random.uniform(-self.cell_size, self.cell_size),
                                                                random.uniform(-self.cell_size, self.cell_size))
             particle_velocity = pygame.Vector2(random.uniform(-2, 2), random.uniform(-2, 2))
@@ -28,8 +29,15 @@ class Explosion:
     def render(self, screen):
         for position, _ in self.particles:
             green = random.uniform(0, 150)
-            pygame.draw.rect(screen, (255, green, 0),
-                             (int(position.x * self.cell_size), int(position.y * self.cell_size), self.cell_size // 5, self.cell_size // 5))
+            cell_rect = pygame.Rect(
+                position.x * self.cell_size,
+                position.y * self.cell_size,
+                self.cell_size,
+                self.cell_size
+            )
+            # pygame.draw.rect(screen, (255, green, 0),
+            #                 (int(position.x * self.cell_size), int(position.y * self.cell_size), self.cell_size // 5, self.cell_size // 5))
+            pygame.draw.rect(screen, (255, green, 0), cell_rect)
 
     def is_finished(self):
         return self.timer >= self.duration
